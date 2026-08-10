@@ -1,0 +1,163 @@
+// Handshake.sh — Prisma Schema
+// Matches the locked architecture (handshake-backend-architecture.md, "Locked v1").
+// No business logic lives here — this file only defines shape and constraints.
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model User {
+  id              String   @id @default(uuid())
+  username        String   @unique
+  passwordHash    String
+  fullName        String
+  college         String
+  department      String?
+  year            Int?
+  email           String   @unique
+  profilePhotoUrl String?
+
+  // Leaderboard score. Equal to the number of verified handshakes this user
+  // has — there is deliberately no separate "points" concept (Decision #1).
+  // Incremented inside the same transaction as handshake creation; never
+  // computed live via COUNT(*), so leaderboard reads stay a single indexed
+  // ORDER BY with no joins or aggregation.
+  handshakeCount  Int      @default(0)
+
+  // Timestamp of this user's most recent verified handshake — i.e. the
+  // moment they reached their current handshakeCount. Set inside the exact
+  // same transaction as the handshakeCount increment (handshake.service.js),
+  // so the two can never drift out of sync. Exists solely to break ties on
+  // the leaderboard: "handshakeCount DESC, lastVerifiedHandshakeAt ASC"
+  // means two users tied on count rank by who got there first. Null for a
+  // user with zero handshakes.
+  lastVerifiedHandshakeAt DateTime?
+
+  // Soft-delete flag. Deactivated accounts are rejected at auth time even if
+  // their JWT hasn't expired yet — see authenticate.js in a later module.
+  isActive        Boolean  @default(true)
+  isAdmin         Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+
+  codesGenerated      HandshakeCode[] @relation("CodeOwner")
+  handshakesInitiated Handshake[]     @relation("Initiator")
+  handshakesReceived  Handshake[]     @relation("Responder")
+  adminActions        AdminAction[]   @relation("AdminActor")
+
+  // Powers `ORDER BY handshakeCount DESC, lastVerifiedHandshakeAt ASC` on
+  // both /me's rank calculation and /leaderboard — same index serves both,
+  // since they now use the identical ranking algorithm.
+  @@index([handshakeCount, lastVerifiedHandshakeAt])
+  @@map("users")
+}
+
+model HandshakeCode {
+  id        String    @id @default(uuid())
+  code      String    // 6-8 chars (length configurable via env), uppercase,
+                       // filtered charset — enforced in application code
+                       // (codeGenerator.js), not the DB, since Prisma has no
+                       // native regex/CHECK constraint support.
+  ownerId   String
+  owner     User      @relation("CodeOwner", fields: [ownerId], references: [id])
+
+  expiresAt DateTime
+  usedAt    DateTime? // null = still active. Set only on successful
+                       // verification (Module 3 returns a user's existing
+                       // active code on repeat generate calls rather than
+                       // invalidating it, so this is no longer also used
+                       // as an "invalidated by a newer code" marker).
+
+  createdAt DateTime  @default(now())
+
+  handshake Handshake?
+
+  // "Does this user currently have an active code" lookup, used by
+  // generate-code to decide whether to return the existing code or mint one.
+  @@index([ownerId, usedAt])
+  // NOTE: "only one active code per user" is enforced at the database level
+  // by a partial unique index — UNIQUE(ownerId) WHERE usedAt IS NULL — added
+  // in migration `20260102000000_add_one_active_code_constraint`. Prisma's
+  // schema DSL can't express partial/filtered indexes, so it isn't visible
+  // here, but it's real and it's what actually prevents two concurrent
+  // generate-code requests from creating two active codes for one user.
+  // verify-code's primary lookup path.
+  @@index([code, usedAt])
+  @@map("handshake_codes")
+}
+
+model Handshake {
+  id          String   @id @default(uuid())
+
+  initiatorId String
+  responderId String
+  initiator   User     @relation("Initiator", fields: [initiatorId], references: [id])
+  responder   User     @relation("Responder", fields: [responderId], references: [id])
+
+  // initiatorId/responderId sorted lexicographically at write time, in
+  // application code — NOT computed by the database. This is what makes the
+  // uniqueness constraint below order-independent: a handshake A→B and a
+  // later attempt B→A resolve to the same (userLowId, userHighId) pair and
+  // collide, satisfying Decision #2 (one verified handshake per pair, ever).
+  userLowId   String
+  userHighId  String
+
+  codeId      String        @unique
+  code        HandshakeCode @relation(fields: [codeId], references: [id])
+
+  createdAt   DateTime      @default(now())
+
+  // Postgres does not auto-index foreign key columns (unlike MySQL) — these
+  // back getHistory()'s `WHERE initiatorId = X OR responderId = X`, used by
+  // both /handshake/history and /dashboard. Without them, that query is a
+  // full table scan on every call. Added during the production readiness
+  // audit; not present in the original schema.
+  @@index([initiatorId])
+  @@index([responderId])
+  @@unique([userLowId, userHighId])
+  @@map("handshakes")
+}
+
+model AdminAction {
+  id           String   @id @default(uuid())
+  adminId      String
+  admin        User     @relation("AdminActor", fields: [adminId], references: [id])
+
+  action       String   // "import" | "reset_password" | "deactivate" | "reactivate" | "export_credentials" | "delete"
+  targetUserId String?
+  metadata     Json?
+
+  createdAt    DateTime @default(now())
+
+  @@map("admin_actions")
+}
+
+// Lightweight audit trail for organizer debugging and post-event analysis —
+// NOT a functional dependency of the handshake system itself. Deliberately
+// has no foreign key relations: audit rows should remain readable even if a
+// referenced user is later hard-deleted (e.g. a mis-imported participant
+// removed by an admin pre-event), rather than being cascade-deleted or
+// blocking that deletion.
+model HandshakeLog {
+  id            String   @id @default(uuid())
+
+  // CODE_GENERATED | CODE_VERIFIED | CODE_EXPIRED | INVALID_CODE |
+  // DUPLICATE_HANDSHAKE | VERIFICATION_FAILED — see auditLog.service.js
+  event         String
+
+  userId        String   // who performed the action being logged
+  targetUserId  String?  // the other participant, when known
+  handshakeCode String?  // the code string involved, when relevant
+  ipAddress     String?
+
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([event])
+  @@map("handshake_logs")
+}
