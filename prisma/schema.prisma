@@ -3,23 +3,23 @@
 // No business logic lives here — this file only defines shape and constraints.
 
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   engineType = "library"
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 model User {
-  id              String   @id @default(uuid())
-  username        String   @unique
+  id              String    @id @default(uuid())
+  username        String    @unique
   passwordHash    String
   fullName        String
   college         String
   department      String?
   year            Int?
-  email           String   @unique
+  email           String    @unique
   profilePhotoUrl String?
 
   // Leaderboard score. Equal to the number of verified handshakes this user
@@ -27,7 +27,7 @@ model User {
   // Incremented inside the same transaction as handshake creation; never
   // computed live via COUNT(*), so leaderboard reads stay a single indexed
   // ORDER BY with no joins or aggregation.
-  handshakeCount  Int      @default(0)
+  handshakeCount  Int       @default(0)
 
   // Timestamp of this user's most recent verified handshake — i.e. the
   // moment they reached their current handshakeCount. Set inside the exact
@@ -40,10 +40,10 @@ model User {
 
   // Soft-delete flag. Deactivated accounts are rejected at auth time even if
   // their JWT hasn't expired yet — see authenticate.js in a later module.
-  isActive        Boolean  @default(true)
-  isAdmin         Boolean  @default(false)
+  isActive        Boolean   @default(true)
+  isAdmin         Boolean   @default(false)
 
-  createdAt       DateTime @default(now())
+  createdAt       DateTime  @default(now())
 
   codesGenerated      HandshakeCode[] @relation("CodeOwner")
   handshakesInitiated Handshake[]     @relation("Initiator")
@@ -80,12 +80,6 @@ model HandshakeCode {
   // "Does this user currently have an active code" lookup, used by
   // generate-code to decide whether to return the existing code or mint one.
   @@index([ownerId, usedAt])
-  // NOTE: "only one active code per user" is enforced at the database level
-  // by a partial unique index — UNIQUE(ownerId) WHERE usedAt IS NULL — added
-  // in migration `20260102000000_add_one_active_code_constraint`. Prisma's
-  // schema DSL can't express partial/filtered indexes, so it isn't visible
-  // here, but it's real and it's what actually prevents two concurrent
-  // generate-code requests from creating two active codes for one user.
   // verify-code's primary lookup path.
   @@index([code, usedAt])
   @@map("handshake_codes")
@@ -114,9 +108,7 @@ model Handshake {
 
   // Postgres does not auto-index foreign key columns (unlike MySQL) — these
   // back getHistory()'s `WHERE initiatorId = X OR responderId = X`, used by
-  // both /handshake/history and /dashboard. Without them, that query is a
-  // full table scan on every call. Added during the production readiness
-  // audit; not present in the original schema.
+  // both /handshake/history and /dashboard.
   @@index([initiatorId])
   @@index([responderId])
   @@unique([userLowId, userHighId])
@@ -138,16 +130,12 @@ model AdminAction {
 }
 
 // Lightweight audit trail for organizer debugging and post-event analysis —
-// NOT a functional dependency of the handshake system itself. Deliberately
-// has no foreign key relations: audit rows should remain readable even if a
-// referenced user is later hard-deleted (e.g. a mis-imported participant
-// removed by an admin pre-event), rather than being cascade-deleted or
-// blocking that deletion.
+// NOT a functional dependency of the handshake system itself.
 model HandshakeLog {
   id            String   @id @default(uuid())
 
   // CODE_GENERATED | CODE_VERIFIED | CODE_EXPIRED | INVALID_CODE |
-  // DUPLICATE_HANDSHAKE | VERIFICATION_FAILED — see auditLog.service.js
+  // DUPLICATE_HANDSHAKE | VERIFICATION_FAILED
   event         String
 
   userId        String   // who performed the action being logged
