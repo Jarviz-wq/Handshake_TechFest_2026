@@ -1,3 +1,11 @@
+// Global handleLogout function for inline onclick handlers
+window.handleLogout = function() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  sessionStorage.clear();
+  window.location.href = 'login.html';
+};
+
 window.addEventListener('DOMContentLoaded', async () => {
 
   // ---------- DOM ELEMENTS ----------
@@ -229,6 +237,10 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (pasteBtn && codeInput) {
     pasteBtn.addEventListener('click', async () => {
       try {
+        if (!navigator.clipboard) {
+          alert('Clipboard access not supported on this browser.');
+          return;
+        }
         const text = await navigator.clipboard.readText();
         if (text) {
           codeInput.value = text.toUpperCase().trim();
@@ -236,7 +248,7 @@ window.addEventListener('DOMContentLoaded', async () => {
           codeInput.focus();
         }
       } catch (err) {
-        console.log('Clipboard paste unavailable');
+        console.log('Clipboard paste unavailable or permission denied');
       }
     });
   }
