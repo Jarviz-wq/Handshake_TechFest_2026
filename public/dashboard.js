@@ -1,10 +1,15 @@
-// Global handleLogout function for inline onclick handlers
-window.handleLogout = function() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  sessionStorage.clear();
-  window.location.href = 'login.html';
-};
+// CSP-compliant Logout Listener attached via DOM ID
+document.addEventListener('DOMContentLoaded', () => {
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      sessionStorage.clear();
+      window.location.href = 'login.html';
+    });
+  }
+});
 
 window.addEventListener('DOMContentLoaded', async () => {
 
@@ -344,3 +349,4 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Auto-poll for pending requests every 10 seconds
   setInterval(fetchDashboardData, 10000);
 });
+

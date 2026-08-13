@@ -1415,7 +1415,7 @@
       <h1 id="userDisplayName">Yadu</h1>
       <div class="handle" id="userHandle">@yadu24</div>
     </div>
-    <button onclick="handleLogout()" class="badge" style="background: transparent; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 6px 12px; margin: 0;">
+    <button id="logoutBtn" class="badge" style="background: transparent; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 6px 12px; margin: 0;">
       <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
         <polyline points="16 17 21 12 16 7"></polyline>
@@ -1502,16 +1502,8 @@
   </div>
 </div>
 
-<!-- External Dashboard JS script compliant with CSP -->
+<!-- Load external script ONLY (CSP Compliant) -->
 <script src="dashboard.js"></script>
-<script>
-  function handleLogout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    sessionStorage.clear();
-    window.location.href = '/login.html';
-  }
-</script>
 
 </body>
 </html>
