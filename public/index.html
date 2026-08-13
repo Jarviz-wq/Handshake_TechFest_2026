@@ -143,17 +143,19 @@
 
   .header{
     display:flex;
-    align-items:flex-start;
+    align-items:center;
     justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
     margin-bottom:48px;
     opacity:0;
     animation:riseIn .7s var(--ease-out) forwards;
   }
 
   .identity h1{
-    font-size:34px;
+    font-size:30px;
     font-weight:700;
-    letter-spacing:-0.03em;
+    letter-spacing:-0.04em;
     line-height:1.05;
     margin-bottom:6px;
   }
@@ -175,7 +177,6 @@
     padding:7px 11px;
     border-radius:100px;
     white-space:nowrap;
-    margin-top:4px;
     transition:border-color .3s var(--ease-out), color .3s var(--ease-out);
   }
   .badge:hover{ border-color:#3a3a3a; color:var(--text); }
@@ -1417,15 +1418,15 @@
       <div class="handle" id="userHandle">@yadu24</div>
     </div>
     <div style="display: flex; align-items: center; gap: 8px;">
-      <button onclick="handleLogout()" class="badge" style="background: transparent; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="badge">TECHFEST '26</div>
+      <button onclick="handleLogout()" class="badge" style="background: transparent; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease-out;">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
           <polyline points="16 17 21 12 16 7"></polyline>
           <line x1="21" y1="12" x2="9" y2="12"></line>
         </svg>
         LOGOUT
       </button>
-      <div class="badge">TECHFEST '26</div>
     </div>
   </div>
 
