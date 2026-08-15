@@ -20,18 +20,13 @@ window.addEventListener('DOMContentLoaded', async () => {
   const recentList = document.getElementById('recentList');
   const pendingCountEl = document.getElementById('pendingCount');
   const countNumberEl = document.getElementById('countNumber');
-  const glyph = document.getElementById('glyph');
 
   const modalBackdrop = document.getElementById('modalBackdrop');
   const openModalBtn = document.getElementById('openModalBtn');
   const closeModalBtn = document.getElementById('closeModalBtn');
   const codeInput = document.getElementById('codeInput');
-  const connectBtn = document.getElementById('connectBtn');
-  const cameraBtn = document.getElementById('cameraBtn'); 
-  const pasteBtn = document.getElementById('pasteBtn'); 
-  const formView = document.getElementById('formView');
-  const successView = document.getElementById('successView');
-  const successName = document.getElementById('successName');
+  const generateCodeBtn = document.getElementById('generateCodeBtn');
+  const codeTimerEl = document.getElementById('codeTimer');
 
   // ---------- AUTH CHECK ----------
   const token = localStorage.getItem('token');
@@ -192,37 +187,80 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // ---------- 3. MODAL LOGIC ----------
+  // ---------- 3. CODE GENERATOR & MODAL LOGIC ----------
+  let timerInterval = null;
+
+  async function generateAndDisplayCode() {
+    if (!codeInput) return;
+
+    codeInput.value = '...';
+    if (generateCodeBtn) {
+      generateCodeBtn.disabled = true;
+      generateCodeBtn.textContent = 'Generating…';
+    }
+
+    try {
+      const response = await fetch('/api/handshakes/generate-code', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success && result.data?.code) {
+        codeInput.value = result.data.code;
+        startCodeTimer(45);
+      } else {
+        codeInput.value = 'ERROR';
+        alert(result.message || 'Could not generate handshake code.');
+      }
+    } catch (err) {
+      codeInput.value = 'ERROR';
+      alert('Server error connecting to code generator.');
+    } finally {
+      if (generateCodeBtn) {
+        generateCodeBtn.disabled = false;
+        generateCodeBtn.textContent = 'Generate New Code';
+      }
+    }
+  }
+
+  function startCodeTimer(seconds) {
+    if (timerInterval) clearInterval(timerInterval);
+
+    let remaining = seconds;
+    if (codeTimerEl) codeTimerEl.textContent = `Valid for ${remaining}s`;
+
+    timerInterval = setInterval(() => {
+      remaining -= 1;
+      if (remaining <= 0) {
+        clearInterval(timerInterval);
+        if (codeTimerEl) codeTimerEl.textContent = 'Code expired. Tap below to generate a new one.';
+        if (codeInput) codeInput.value = 'EXPIRED';
+      } else {
+        if (codeTimerEl) codeTimerEl.textContent = `Valid for ${remaining}s`;
+      }
+    }, 1000);
+  }
+
   function openModal() {
     if (!modalBackdrop) return;
     modalBackdrop.classList.add('open');
-    if (formView) formView.classList.remove('hide');
-    if (successView) successView.classList.remove('show');
-    
-    // Reset Modal Title
-    const titleEl = document.querySelector('.modal h3, #modalTitle');
-    if (titleEl) titleEl.textContent = 'Enter Handshake Code';
-
-    if (codeInput) {
-      codeInput.value = '';
-      codeInput.placeholder = "HS-4821";
-      codeInput.readOnly = false;
-      setTimeout(() => codeInput.focus(), 380);
-    }
-    if (connectBtn) {
-      connectBtn.disabled = true;
-      connectBtn.textContent = 'Connect';
-    }
     document.body.style.overflow = 'hidden';
+    generateAndDisplayCode();
   }
 
   function closeModal() {
     if (!modalBackdrop) return;
     modalBackdrop.classList.remove('open');
     document.body.style.overflow = '';
-    if (glyph) glyph.classList.remove('linked');
+    if (timerInterval) clearInterval(timerInterval);
   }
 
+  if (generateCodeBtn) generateCodeBtn.addEventListener('click', generateAndDisplayCode);
   if (openModalBtn) openModalBtn.addEventListener('click', openModal);
   if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
   if (modalBackdrop) modalBackdrop.addEventListener('click', (e) => { if (e.target === modalBackdrop) closeModal(); });
@@ -231,117 +269,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (e.key === 'Escape' && modalBackdrop && modalBackdrop.classList.contains('open')) closeModal();
   });
 
-  if (codeInput && connectBtn) {
-    codeInput.addEventListener('input', () => {
-      codeInput.value = codeInput.value.toUpperCase();
-      connectBtn.disabled = codeInput.value.trim().length < 4;
-    });
-  }
-
-  // CLIPBOARD PASTE BUTTON
-  if (pasteBtn && codeInput) {
-    pasteBtn.addEventListener('click', async () => {
-      try {
-        if (!navigator.clipboard) {
-          alert('Clipboard access not supported on this browser.');
-          return;
-        }
-        const text = await navigator.clipboard.readText();
-        if (text) {
-          codeInput.value = text.toUpperCase().trim();
-          if (connectBtn) connectBtn.disabled = codeInput.value.length < 4;
-          codeInput.focus();
-        }
-      } catch (err) {
-        console.log('Clipboard paste unavailable or permission denied');
-      }
-    });
-  }
-
-  // CODE GENERATOR BUTTON (Repurposed Camera Button)
-  if (cameraBtn && codeInput) {
-    cameraBtn.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4m-4.93-7.07l-2.83 2.83m-8.48 8.48l-2.83 2.83"/></svg>`;
-    cameraBtn.title = "Generate your shareable code";
-
-    cameraBtn.addEventListener('click', async () => {
-      cameraBtn.style.color = 'var(--accent)';
-      
-      try {
-        const response = await fetch('/api/handshakes/generate-code', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success && result.data?.code) {
-          codeInput.readOnly = true; 
-          codeInput.value = result.data.code;
-          
-          const titleEl = document.querySelector('.modal h3, #modalTitle');
-          if (titleEl) titleEl.textContent = 'Your Active Handshake Code';
-
-          if (connectBtn) {
-            connectBtn.disabled = false;
-            connectBtn.textContent = 'Code Active (Valid 45s)';
-          }
-        } else {
-          alert('Could not generate handshake code.');
-        }
-      } catch (err) {
-        alert('Server error generating code.');
-      } finally {
-        setTimeout(() => { cameraBtn.style.color = ''; }, 500);
-      }
-    });
-  }
-
-  if (connectBtn) {
-    connectBtn.addEventListener('click', async () => {
-      if (codeInput.readOnly) return; 
-
-      if (connectBtn.disabled) return;
-      const code = codeInput.value.trim();
-      
-      connectBtn.disabled = true;
-      connectBtn.textContent = 'Connecting…';
-      if (glyph) glyph.classList.add('linked');
-
-      try {
-        const response = await fetch('/api/handshakes/connect', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code })
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-          const connectedUser = result.data?.full_name || result.data?.name || result.data?.username || 'Attendee';
-
-          if (formView) formView.classList.add('hide');
-          if (successView) successView.classList.add('show');
-          if (successName) successName.textContent = `Connected with ${connectedUser}`;
-
-          fetchUserProfile();
-          fetchDashboardData();
-
-          setTimeout(() => { closeModal(); }, 1500);
-        } else {
-          alert(result.message || 'Invalid Handshake Code or connection failed.');
-          connectBtn.disabled = false;
-          connectBtn.textContent = 'Connect';
-          if (glyph) glyph.classList.remove('linked');
-        }
-      } catch (err) {
-        alert('Could not reach backend database.');
-        connectBtn.disabled = false;
-        connectBtn.textContent = 'Connect';
-        if (glyph) glyph.classList.remove('linked');
-      }
-    });
-  }
-
   // ---------- INITIALIZATION ----------
   await fetchUserProfile();
   await fetchDashboardData();
@@ -349,4 +276,3 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Auto-poll for pending requests every 10 seconds
   setInterval(fetchDashboardData, 10000);
 });
-
