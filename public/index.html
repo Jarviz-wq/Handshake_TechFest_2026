@@ -500,7 +500,7 @@
     to{ opacity:1; transform:translateY(0); }
   }
 
-  /* ---------- MODAL (CODE GENERATOR) ---------- */
+  /* ---------- MODAL & TABS ---------- */
 
   .modal-backdrop{
     position:fixed;
@@ -538,7 +538,39 @@
     height:4px;
     background:var(--border);
     border-radius:100px;
-    margin:0 auto 24px;
+    margin:0 auto 20px;
+  }
+
+  /* Segmented Tab Switcher */
+  .tab-switcher{
+    display:flex;
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:4px;
+    margin-bottom:24px;
+    gap:4px;
+  }
+
+  .tab-btn{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    padding:10px 0;
+    font-family:inherit;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--text-dim);
+    border-radius:8px;
+    cursor:pointer;
+    transition:all .25s var(--ease-out);
+  }
+
+  .tab-btn.active{
+    background:var(--card);
+    color:var(--text);
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
   }
 
   .modal h3{
@@ -557,29 +589,46 @@
   .code-input-wrap{
     display:flex;
     align-items:center;
-    justify-content:center;
+    gap:10px;
     background:var(--bg);
     border:1px solid var(--border);
     border-radius:16px;
-    padding:20px 16px;
-    margin-bottom:20px;
+    padding:16px;
+    margin-bottom:14px;
+    transition:border-color .3s var(--ease-out);
   }
+  .code-input-wrap:focus-within{ border-color:rgba(47,143,107,0.4); }
 
   .code-input{
-    width:100%;
+    flex:1;
     background:none;
     border:none;
     outline:none;
     color:var(--text);
     font-family:'Space Mono', monospace;
-    font-size:28px;
-    font-weight:700;
-    letter-spacing:0.15em;
-    text-align:center;
-    cursor:default;
+    font-size:22px;
+    letter-spacing:0.1em;
+    min-width:0;
     text-transform:uppercase;
   }
-  .code-input::placeholder{ color:var(--placeholder); letter-spacing:0.15em; }
+  .code-input::placeholder{ color:var(--placeholder); letter-spacing:0.08em; }
+
+  .mini-btn{
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text-dim);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:all .25s var(--ease-out);
+  }
+  .mini-btn:hover{ color:var(--text); transform:translateY(-1px); }
+  .mini-btn svg{ width:15px; height:15px; }
 
   .connect-btn{
     width:100%;
@@ -621,7 +670,36 @@
   .modal-close:hover{ background:var(--surface); color:var(--text); }
   .modal-close svg{ width:13px; height:13px; }
 
-  .form-view{ transition:opacity .3s var(--ease-out); }
+  .success-view{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:20px 0 8px;
+  }
+  .success-view.show{ display:flex; animation:riseIn .5s var(--ease-out) forwards; }
+
+  .success-ring{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    border:1px solid rgba(47,143,107,0.4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:22px;
+    animation:ringPop .6s var(--ease-spring);
+  }
+  .success-ring svg{ width:24px; height:24px; stroke:var(--accent); }
+
+  @keyframes ringPop{
+    0%{ transform:scale(0.6); opacity:0; }
+    60%{ transform:scale(1.06); opacity:1; }
+    100%{ transform:scale(1); }
+  }
+
+  .success-view h3{ margin-bottom:6px; }
+  .success-view p{ font-size:13.5px; color:var(--text-dim); }
 
   button:focus-visible, input:focus-visible{
     outline:2px solid var(--accent);
@@ -1415,7 +1493,7 @@
 
 </div>
 
-<!-- MODAL (CODE GENERATOR ONLY) -->
+<!-- MODAL (DUAL: SHARE CODE & ENTER CODE) -->
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal">
     <button class="modal-close" id="closeModalBtn" aria-label="Close">
@@ -1424,16 +1502,47 @@
 
     <div class="modal-handle"></div>
 
-    <div class="form-view" id="formView" style="text-align: center;">
-      <h3 id="modalTitle">Your Handshake Code</h3>
+    <!-- Segmented Tab Switcher -->
+    <div class="tab-switcher">
+      <button class="tab-btn active" id="tabMyCode">My Code</button>
+      <button class="tab-btn" id="tabEnterCode">Enter Code</button>
+    </div>
+
+    <!-- TAB 1: GENERATE / SHARE CODE VIEW -->
+    <div class="form-view" id="myCodeView" style="text-align: center;">
+      <h3>Your Handshake Code</h3>
       <p class="sub">Share this temporary code with someone nearby.</p>
 
-      <div class="code-input-wrap">
-        <input type="text" class="code-input" id="codeInput" placeholder="------" readonly>
+      <div class="code-input-wrap" style="justify-content: center; padding: 18px 14px; margin-bottom: 16px;">
+        <input type="text" class="code-input" id="generatedCodeDisplay" placeholder="------" readonly style="text-align: center; font-size: 26px; font-weight: 700; letter-spacing: 0.15em; cursor: default;">
       </div>
 
       <button class="connect-btn" id="generateCodeBtn">Generate New Code</button>
       <div id="codeTimer" style="font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-dim); margin-top: 14px;">Valid for 45 seconds</div>
+    </div>
+
+    <!-- TAB 2: ENTER ANOTHER PERSON'S CODE VIEW -->
+    <div class="form-view" id="enterCodeView" style="display: none;">
+      <h3>Enter Handshake Code</h3>
+      <p class="sub">Type or paste the code shared with you.</p>
+
+      <div class="code-input-wrap">
+        <input type="text" class="code-input" id="codeInput" placeholder="HS-4821" maxlength="8" autocomplete="off" spellcheck="false">
+        <button class="mini-btn" id="pasteBtn" aria-label="Paste code" title="Paste">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/></svg>
+        </button>
+      </div>
+
+      <button class="connect-btn" id="connectBtn" disabled>Connect</button>
+    </div>
+
+    <!-- SUCCESS NOTIFICATION -->
+    <div class="success-view" id="successView">
+      <div class="success-ring">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h3 id="successName">Connected</h3>
+      <p>Added to your verified handshakes.</p>
     </div>
 
   </div>
