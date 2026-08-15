@@ -20,13 +20,29 @@ window.addEventListener('DOMContentLoaded', async () => {
   const recentList = document.getElementById('recentList');
   const pendingCountEl = document.getElementById('pendingCount');
   const countNumberEl = document.getElementById('countNumber');
+  const glyph = document.getElementById('glyph');
 
   const modalBackdrop = document.getElementById('modalBackdrop');
   const openModalBtn = document.getElementById('openModalBtn');
   const closeModalBtn = document.getElementById('closeModalBtn');
-  const codeInput = document.getElementById('codeInput');
+
+  // Tabs
+  const tabMyCode = document.getElementById('tabMyCode');
+  const tabEnterCode = document.getElementById('tabEnterCode');
+  const myCodeView = document.getElementById('myCodeView');
+  const enterCodeView = document.getElementById('enterCodeView');
+
+  // Generator Elements
+  const generatedCodeDisplay = document.getElementById('generatedCodeDisplay');
   const generateCodeBtn = document.getElementById('generateCodeBtn');
   const codeTimerEl = document.getElementById('codeTimer');
+
+  // Input / Connect Elements
+  const codeInput = document.getElementById('codeInput');
+  const pasteBtn = document.getElementById('pasteBtn');
+  const connectBtn = document.getElementById('connectBtn');
+  const successView = document.getElementById('successView');
+  const successName = document.getElementById('successName');
 
   // ---------- AUTH CHECK ----------
   const token = localStorage.getItem('token');
@@ -57,7 +73,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     requestAnimationFrame(tick);
   }
 
-  // ---------- 1. FETCH USER PROFILE FROM DATABASE ----------
+  // ---------- 1. FETCH USER PROFILE ----------
   async function fetchUserProfile() {
     try {
       const response = await fetch('/api/auth/me', {
@@ -187,13 +203,38 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // ---------- 3. CODE GENERATOR & MODAL LOGIC ----------
+  // ---------- 3. MODAL, TABS & CODE GENERATOR LOGIC ----------
   let timerInterval = null;
 
-  async function generateAndDisplayCode() {
-    if (!codeInput) return;
+  function switchTab(tab) {
+    if (tab === 'myCode') {
+      tabMyCode.classList.add('active');
+      tabEnterCode.classList.remove('active');
+      myCodeView.style.display = 'block';
+      enterCodeView.style.display = 'none';
+      successView.classList.remove('show');
+      generateAndDisplayCode();
+    } else {
+      tabEnterCode.classList.add('active');
+      tabMyCode.classList.remove('active');
+      myCodeView.style.display = 'none';
+      enterCodeView.style.display = 'block';
+      successView.classList.remove('show');
+      if (timerInterval) clearInterval(timerInterval);
+      if (codeInput) {
+        codeInput.value = '';
+        setTimeout(() => codeInput.focus(), 150);
+      }
+    }
+  }
 
-    codeInput.value = '...';
+  if (tabMyCode) tabMyCode.addEventListener('click', () => switchTab('myCode'));
+  if (tabEnterCode) tabEnterCode.addEventListener('click', () => switchTab('enterCode'));
+
+  async function generateAndDisplayCode() {
+    if (!generatedCodeDisplay) return;
+
+    generatedCodeDisplay.value = '...';
     if (generateCodeBtn) {
       generateCodeBtn.disabled = true;
       generateCodeBtn.textContent = 'Generating…';
@@ -211,14 +252,14 @@ window.addEventListener('DOMContentLoaded', async () => {
       const result = await response.json();
 
       if (response.ok && result.success && result.data?.code) {
-        codeInput.value = result.data.code;
+        generatedCodeDisplay.value = result.data.code;
         startCodeTimer(45);
       } else {
-        codeInput.value = 'ERROR';
+        generatedCodeDisplay.value = 'ERROR';
         alert(result.message || 'Could not generate handshake code.');
       }
     } catch (err) {
-      codeInput.value = 'ERROR';
+      generatedCodeDisplay.value = 'ERROR';
       alert('Server error connecting to code generator.');
     } finally {
       if (generateCodeBtn) {
@@ -239,7 +280,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       if (remaining <= 0) {
         clearInterval(timerInterval);
         if (codeTimerEl) codeTimerEl.textContent = 'Code expired. Tap below to generate a new one.';
-        if (codeInput) codeInput.value = 'EXPIRED';
+        if (generatedCodeDisplay) generatedCodeDisplay.value = 'EXPIRED';
       } else {
         if (codeTimerEl) codeTimerEl.textContent = `Valid for ${remaining}s`;
       }
@@ -250,7 +291,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!modalBackdrop) return;
     modalBackdrop.classList.add('open');
     document.body.style.overflow = 'hidden';
-    generateAndDisplayCode();
+    switchTab('myCode');
   }
 
   function closeModal() {
@@ -258,6 +299,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     modalBackdrop.classList.remove('open');
     document.body.style.overflow = '';
     if (timerInterval) clearInterval(timerInterval);
+    if (glyph) glyph.classList.remove('linked');
   }
 
   if (generateCodeBtn) generateCodeBtn.addEventListener('click', generateAndDisplayCode);
@@ -268,6 +310,80 @@ window.addEventListener('DOMContentLoaded', async () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modalBackdrop && modalBackdrop.classList.contains('open')) closeModal();
   });
+
+  // ENTER CODE VALIDATION & CONNECT
+  if (codeInput && connectBtn) {
+    codeInput.addEventListener('input', () => {
+      codeInput.value = codeInput.value.toUpperCase();
+      connectBtn.disabled = codeInput.value.trim().length < 4;
+    });
+  }
+
+  if (pasteBtn && codeInput) {
+    pasteBtn.addEventListener('click', async () => {
+      try {
+        if (!navigator.clipboard) {
+          alert('Clipboard access not supported.');
+          return;
+        }
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          codeInput.value = text.toUpperCase().trim();
+          if (connectBtn) connectBtn.disabled = codeInput.value.length < 4;
+          codeInput.focus();
+        }
+      } catch (err) {
+        console.log('Clipboard unavailable or denied');
+      }
+    });
+  }
+
+  if (connectBtn) {
+    connectBtn.addEventListener('click', async () => {
+      if (connectBtn.disabled) return;
+      const code = codeInput.value.trim();
+
+      connectBtn.disabled = true;
+      connectBtn.textContent = 'Connecting…';
+      if (glyph) glyph.classList.add('linked');
+
+      try {
+        const response = await fetch('/api/handshakes/connect', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ code })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          const connectedUser = result.data?.full_name || result.data?.name || result.data?.username || 'Attendee';
+
+          enterCodeView.style.display = 'none';
+          successView.classList.add('show');
+          if (successName) successName.textContent = `Connected with ${connectedUser}`;
+
+          fetchUserProfile();
+          fetchDashboardData();
+
+          setTimeout(() => { closeModal(); }, 1500);
+        } else {
+          alert(result.message || 'Invalid Handshake Code or connection failed.');
+          connectBtn.disabled = false;
+          connectBtn.textContent = 'Connect';
+          if (glyph) glyph.classList.remove('linked');
+        }
+      } catch (err) {
+        alert('Could not reach backend database.');
+        connectBtn.disabled = false;
+        connectBtn.textContent = 'Connect';
+        if (glyph) glyph.classList.remove('linked');
+      }
+    });
+  }
 
   // ---------- INITIALIZATION ----------
   await fetchUserProfile();
