@@ -89,9 +89,9 @@ window.addEventListener('DOMContentLoaded', () => {
         if (user && user.id) localStorage.setItem('userId', user.id);
 
         // Redirect to index (default entry point)
-        setTimeout(() => {
+        
           window.location.href = 'index.html';
-        }, 400);
+        
       } else {
         alert(result.message || result.error || 'Login failed. Please check your credentials.');
         resetButtonState();
