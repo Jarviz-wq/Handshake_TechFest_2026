@@ -3,17 +3,16 @@ const jwt = require('jsonwebtoken');
 const prisma = require('../db/client');
 const AppError = require('../utils/AppError');
 const { JWT_SECRET, JWT_EXPIRY } = require('../config/constants');
-const { getRank, toPublicProfile } = require('./user.service');
+const { toPublicProfile } = require('./user.service');
+
+// Fast constant-time comparison fallback (cost 10)
+const DUMMY_HASH = '$2b$10$wN9aW691z1g35i0eZ5t6Eu5eT67PqQyGqK2s9zXh8V4wN9aW691z1';
 
 async function login(username, password) {
   const user = await prisma.user.findUnique({ where: { username } });
 
-  console.log("--- DEBUG LOGIN ---");
-  console.log("Input Username:", username);
-  console.log("Prisma Found User:", user);
-
   if (!user) {
-    await bcrypt.compare(password, '$2b$12$invalidsaltinvalidsaltinvalidsalte');
+    await bcrypt.compare(password, DUMMY_HASH);
     throw new AppError('INVALID_CREDENTIALS', 'Incorrect username or password.', 401);
   }
 
@@ -26,15 +25,16 @@ async function login(username, password) {
     throw new AppError('ACCOUNT_DEACTIVATED', 'This account has been deactivated.', 403);
   }
 
-  const token = jwt.sign({ sub: user.id, isAdmin: user.isAdmin }, JWT_SECRET, {
-    expiresIn: JWT_EXPIRY,
-  });
+  const token = jwt.sign(
+    { sub: user.id, isAdmin: user.isAdmin },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRY }
+  );
 
-  const rank = await getRank(user.id, user.handshakeCount, user.lastVerifiedHandshakeAt);
-
+  // Return immediately without blocking on secondary rank calculations
   return {
     token,
-    user: toPublicProfile(user, rank),
+    user: toPublicProfile(user, null),
   };
 }
 
