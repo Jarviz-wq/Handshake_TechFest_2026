@@ -1,6 +1,4 @@
 window.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM Ready');
-
   // ---------- DOM ELEMENTS ----------
   const beaconWrap = document.getElementById('beaconWrap');
   const continueBtn = document.getElementById('continueBtn');
@@ -12,9 +10,31 @@ window.addEventListener('DOMContentLoaded', () => {
   const forgotBtn = document.getElementById('forgotBtn');
   const loginForm = document.getElementById('loginForm');
   const brandMark = document.getElementById('brandMark');
+  const errorMessage = document.getElementById('errorMessage');
+
+  // ---------- HELPER: INLINE ERROR HANDLER ----------
+  function showError(msg) {
+    if (errorMessage) {
+      errorMessage.textContent = msg;
+      errorMessage.style.display = 'block';
+    }
+  }
+
+  function hideError() {
+    if (errorMessage) {
+      errorMessage.style.display = 'none';
+      errorMessage.textContent = '';
+    }
+  }
+
+  // Clear error when user types
+  if (usernameInput && passwordInput) {
+    [usernameInput, passwordInput].forEach((input) => {
+      input.addEventListener('input', hideError);
+    });
+  }
 
   // ---------- AUTH GUARD ----------
-  // If user is already authenticated, redirect straight to index/dashboard
   if (localStorage.getItem('token')) {
     window.location.href = 'index.html';
     return;
@@ -48,23 +68,23 @@ window.addEventListener('DOMContentLoaded', () => {
   // ---------- FORGOT PASSWORD HANDLER ----------
   if (forgotBtn) {
     forgotBtn.addEventListener('click', () => {
-      alert('Please contact the TechFest administrator to reset your password.');
+      showError('Please contact the TechFest administrator to reset your password.');
     });
   }
 
   // ---------- SUBMISSION LOGIC ----------
   async function handleLogin(e) {
     if (e) e.preventDefault();
+    hideError();
 
     const username = usernameInput.value.trim();
     const password = passwordInput.value;
 
     if (!username || !password) {
-      alert('Please fill in both username and password.');
+      showError('Please enter both username and password.');
       return;
     }
 
-    // Set UI loading state
     continueBtn.classList.add('loading');
     continueBtn.disabled = true;
     if (btnLabel) btnLabel.textContent = 'Signing In...';
@@ -84,21 +104,17 @@ window.addEventListener('DOMContentLoaded', () => {
         const token = result.token || result.data?.token;
         const user = result.user || result.data?.user;
 
-        // Store Token and User ID
         if (token) localStorage.setItem('token', token);
         if (user && user.id) localStorage.setItem('userId', user.id);
 
-        // Redirect to index (default entry point)
-        
-          window.location.href = 'index.html';
-        
+        window.location.href = 'index.html';
       } else {
-        alert(result.message || result.error || 'Login failed. Please check your credentials.');
+        showError(result.message || result.error || 'Incorrect username or password.');
         resetButtonState();
       }
     } catch (err) {
       console.error('Fetch Error:', err);
-      alert('Unable to connect to the backend server. Is Node running?');
+      showError('Unable to connect to the backend server. Please try again.');
       resetButtonState();
     }
   }
@@ -111,7 +127,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if (brandMark) brandMark.classList.remove('glitching');
   }
 
-  // Bind submit event to form
   if (loginForm) {
     loginForm.addEventListener('submit', handleLogin);
   } else if (continueBtn) {

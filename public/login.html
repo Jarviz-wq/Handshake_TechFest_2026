@@ -555,6 +555,27 @@
   .forgot:hover{ color:var(--accent); }
   .forgot:active{ color:var(--accent); opacity:0.7; }
 
+  /* error banner */
+  .error-banner {
+    display: none;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    color: #dc2626;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 12px 16px;
+    border-radius: 14px;
+    text-align: center;
+    line-height: 1.4;
+    animation: shakeErr 0.35s var(--ease-spring);
+  }
+
+  @keyframes shakeErr {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+  }
+
   /* continue button */
 
   .btn-continue{
@@ -952,397 +973,7 @@
   <path class="n-line" d="M310.4,811.3 L314.3,815.6"/>
   <path class="n-line" d="M369.9,807.8 L366.5,788.9"/>
   <path class="n-line" d="M369.9,807.8 L357.2,816.7"/>
-  <path class="n-line" d="M50.2,862.1 L50.4,846.7"/>
-  <path class="n-line" d="M50.2,862.1 L70.1,861.4"/>
-  <path class="n-line" d="M50.2,862.1 L59.0,850.7"/>
-  <path class="n-line" d="M50.2,862.1 L35.3,868.7"/>
-  <path class="n-line" d="M111.1,855.4 L103.4,869.2"/>
-  <path class="n-line" d="M111.1,855.4 L102.9,859.8"/>
-  <path class="n-line" d="M111.1,855.4 L121.8,848.3"/>
-  <path class="n-line" d="M111.1,855.4 L100.2,845.6"/>
-  <path class="n-line" d="M194.0,880.2 L178.7,869.4"/>
-  <path class="n-line" d="M194.0,880.2 L188.4,896.0"/>
-  <path class="n-line" d="M194.0,880.2 L203.7,884.7"/>
-  <path class="n-line" d="M194.0,880.2 L179.4,885.3"/>
-  <path class="n-line" d="M188.4,896.0 L178.7,869.4"/>
-  <path class="n-line" d="M295.1,858.0 L310.1,855.4"/>
-  <path class="n-line" d="M295.1,858.0 L311.5,870.8"/>
-  <path class="n-line" d="M295.1,858.0 L278.3,853.1"/>
-  <path class="n-line" d="M295.1,858.0 L314.1,850.5"/>
-  <path class="n-line" d="M310.1,855.4 L278.3,853.1"/>
-  <path class="n-line" d="M364.4,876.2 L381.7,872.5"/>
-  <path class="n-line" d="M364.4,876.2 L374.1,865.5"/>
-  <path class="n-line" d="M364.4,876.2 L368.5,865.1"/>
-  <path class="n-line" d="M364.4,876.2 L364.1,859.9"/>
-  <path class="n-line" d="M364.4,876.2 L372.9,870.4"/>
-  <path class="n-line" d="M372.9,870.4 L368.5,865.1"/>
-  <path class="n-line-bridge" d="M72.7,174.4 L58.4,136.5"/>
-  <path class="n-line-bridge" d="M245.1,175.7 L265.3,120.3"/>
-  <path class="n-line-bridge" d="M117.8,240.7 L171.2,251.0"/>
-  <path class="n-line-bridge" d="M326.5,247.4 L327.0,196.9"/>
-  <path class="n-line-bridge" d="M174.3,367.3 L115.7,370.0"/>
-  <path class="n-line-bridge" d="M375.0,359.1 L360.3,317.9"/>
-  <path class="n-line-bridge" d="M-0.1,632.1 L4.1,573.1"/>
-  <path class="n-line-bridge" d="M196.5,758.6 L203.3,823.2"/>
-  <path class="n-line-bridge" d="M50.2,862.1 L11.1,852.3"/>
-  <path class="n-line-bridge" d="M111.1,855.4 L70.0,817.5"/>
-  <path class="n-line-bridge" d="M364.4,876.2 L369.9,807.8"/>
-
-  <circle class="n-hub" cx="60.8" cy="0.3" r="1.84" style="--op:0.061"/>
-  <circle class="n-spoke" cx="70.1" cy="6.5" r="0.58" style="--op:0.04"/>
-  <circle class="n-hub" cx="112.6" cy="0.4" r="1.72" style="--op:0.069"/>
-  <circle class="n-spoke" cx="110.8" cy="15.5" r="0.71" style="--op:0.039"/>
-  <circle class="n-spoke" cx="122.9" cy="10.9" r="0.57" style="--op:0.043"/>
-  <circle class="n-spoke" cx="99.7" cy="2.4" r="0.63" style="--op:0.043"/>
-  <circle class="n-hub" cx="321.1" cy="7.0" r="2.1" style="--op:0.064"/>
-  <circle class="n-spoke" cx="312.9" cy="11.5" r="0.6" style="--op:0.032"/>
-  <circle class="n-spoke" cx="320.0" cy="25.1" r="0.86" style="--op:0.035"/>
-  <circle class="n-spoke" cx="330.5" cy="5.6" r="0.69" style="--op:0.047"/>
-  <circle class="n-hub" cx="389.4" cy="16.7" r="1.84" style="--op:0.069"/>
-  <circle class="n-spoke" cx="391.9" cy="34.5" r="0.67" style="--op:0.03"/>
-  <circle class="n-spoke" cx="383.4" cy="29.0" r="0.52" style="--op:0.026"/>
-  <circle class="n-spoke" cx="381.8" cy="9.6" r="0.82" style="--op:0.039"/>
-  <circle class="n-hub" cx="46.1" cy="50.8" r="2.19" style="--op:0.089"/>
-  <circle class="n-spoke" cx="28.7" cy="40.9" r="0.65" style="--op:0.042"/>
-  <circle class="n-spoke" cx="33.1" cy="38.0" r="0.96" style="--op:0.03"/>
-  <circle class="n-spoke" cx="40.0" cy="31.4" r="0.84" style="--op:0.042"/>
-  <circle class="n-spoke" cx="63.2" cy="53.4" r="0.98" style="--op:0.047"/>
-  <circle class="n-spoke" cx="53.9" cy="35.7" r="0.62" style="--op:0.041"/>
-  <circle class="n-hub" cx="107.1" cy="60.7" r="1.75" style="--op:0.073"/>
-  <circle class="n-spoke" cx="112.0" cy="77.2" r="0.7" style="--op:0.027"/>
-  <circle class="n-spoke" cx="96.8" cy="48.6" r="0.69" style="--op:0.033"/>
-  <circle class="n-spoke" cx="117.2" cy="47.1" r="0.75" style="--op:0.032"/>
-  <circle class="n-spoke" cx="114.6" cy="51.3" r="0.58" style="--op:0.035"/>
-  <circle class="n-hub" cx="198.3" cy="62.7" r="1.99" style="--op:0.065"/>
-  <circle class="n-spoke" cx="188.9" cy="53.0" r="0.83" style="--op:0.031"/>
-  <circle class="n-spoke" cx="205.4" cy="78.0" r="0.55" style="--op:0.034"/>
-  <circle class="n-spoke" cx="207.2" cy="55.4" r="0.71" style="--op:0.029"/>
-  <circle class="n-spoke" cx="200.4" cy="51.3" r="0.79" style="--op:0.043"/>
-  <circle class="n-spoke" cx="215.2" cy="74.4" r="0.78" style="--op:0.043"/>
-  <circle class="n-hub" cx="248.0" cy="67.8" r="1.71" style="--op:0.072"/>
-  <circle class="n-spoke" cx="246.2" cy="55.6" r="0.68" style="--op:0.027"/>
-  <circle class="n-spoke" cx="264.2" cy="79.2" r="0.7" style="--op:0.026"/>
-  <circle class="n-spoke" cx="231.0" cy="77.0" r="0.75" style="--op:0.04"/>
-  <g transform="translate(384.2,69.5)"><circle class="n-hub n-pulse pulse-c-0" cx="0" cy="0" r="1.98" style="--op:0.07"/></g>
-  <g transform="translate(389.5,85.8)"><circle class="n-spoke n-pulse pulse-c-1" cx="0" cy="0" r="0.63" style="--op:0.026"/></g>
-  <g transform="translate(387.3,59.7)"><circle class="n-spoke n-pulse pulse-c-3" cx="0" cy="0" r="0.67" style="--op:0.047"/></g>
-  <g transform="translate(371.9,63.7)"><circle class="n-spoke n-pulse pulse-c-2" cx="0" cy="0" r="0.78" style="--op:0.032"/></g>
-  <circle class="n-hub" cx="58.4" cy="136.5" r="2.1" style="--op:0.066"/>
-  <circle class="n-spoke" cx="70.1" cy="146.8" r="0.73" style="--op:0.04"/>
-  <circle class="n-spoke" cx="59.2" cy="121.0" r="0.98" style="--op:0.034"/>
-  <circle class="n-spoke" cx="53.9" cy="125.9" r="0.79" style="--op:0.049"/>
-  <circle class="n-hub" cx="140.5" cy="136.5" r="2.16" style="--op:0.079"/>
-  <circle class="n-spoke" cx="131.2" cy="137.6" r="0.81" style="--op:0.035"/>
-  <circle class="n-spoke" cx="141.8" cy="119.6" r="0.71" style="--op:0.032"/>
-  <circle class="n-hub" cx="175.5" cy="138.8" r="2.2" style="--op:0.086"/>
-  <circle class="n-spoke" cx="164.2" cy="140.1" r="0.69" style="--op:0.048"/>
-  <circle class="n-spoke" cx="184.0" cy="146.2" r="0.52" style="--op:0.028"/>
-  <circle class="n-spoke" cx="182.5" cy="149.4" r="0.75" style="--op:0.033"/>
-  <circle class="n-spoke" cx="167.9" cy="124.1" r="0.68" style="--op:0.049"/>
-  <g transform="translate(265.3,120.3)"><circle class="n-hub n-pulse pulse-b-0" cx="0" cy="0" r="1.79" style="--op:0.066"/></g>
-  <g transform="translate(279.6,115.8)"><circle class="n-spoke n-pulse pulse-b-1" cx="0" cy="0" r="0.61" style="--op:0.042"/></g>
-  <g transform="translate(266.5,107.1)"><circle class="n-spoke n-pulse pulse-b-3" cx="0" cy="0" r="0.62" style="--op:0.025"/></g>
-  <g transform="translate(249.9,123.5)"><circle class="n-spoke n-pulse pulse-b-2" cx="0" cy="0" r="0.77" style="--op:0.035"/></g>
-  <circle class="n-hub" cx="314.7" cy="134.0" r="1.84" style="--op:0.075"/>
-  <circle class="n-spoke" cx="318.1" cy="147.4" r="0.83" style="--op:0.039"/>
-  <circle class="n-spoke" cx="308.3" cy="126.9" r="0.81" style="--op:0.039"/>
-  <circle class="n-spoke" cx="319.1" cy="147.6" r="0.92" style="--op:0.049"/>
-  <circle class="n-spoke" cx="305.9" cy="144.7" r="0.67" style="--op:0.034"/>
-  <circle class="n-hub" cx="-9.1" cy="171.6" r="2.23" style="--op:0.069"/>
-  <circle class="n-spoke" cx="8.0" cy="181.8" r="0.86" style="--op:0.042"/>
-  <circle class="n-hub" cx="72.7" cy="174.4" r="2.11" style="--op:0.089"/>
-  <circle class="n-spoke" cx="87.9" cy="168.3" r="0.91" style="--op:0.029"/>
-  <circle class="n-spoke" cx="78.7" cy="189.9" r="0.81" style="--op:0.037"/>
-  <circle class="n-spoke" cx="62.5" cy="190.3" r="0.78" style="--op:0.034"/>
-  <circle class="n-spoke" cx="70.8" cy="184.7" r="0.64" style="--op:0.044"/>
-  <circle class="n-spoke" cx="72.2" cy="163.3" r="0.77" style="--op:0.031"/>
-  <circle class="n-hub" cx="122.1" cy="174.9" r="1.85" style="--op:0.07"/>
-  <circle class="n-spoke" cx="131.0" cy="184.7" r="0.59" style="--op:0.038"/>
-  <circle class="n-spoke" cx="108.7" cy="171.5" r="0.56" style="--op:0.027"/>
-  <circle class="n-spoke" cx="111.8" cy="179.6" r="0.53" style="--op:0.028"/>
-  <circle class="n-spoke" cx="125.2" cy="185.9" r="0.85" style="--op:0.028"/>
-  <circle class="n-hub" cx="172.7" cy="191.2" r="1.97" style="--op:0.083"/>
-  <circle class="n-spoke" cx="169.4" cy="200.9" r="0.74" style="--op:0.029"/>
-  <circle class="n-spoke" cx="189.4" cy="177.0" r="0.93" style="--op:0.047"/>
-  <circle class="n-spoke" cx="180.6" cy="185.6" r="0.53" style="--op:0.031"/>
-  <g transform="translate(245.1,175.7)"><circle class="n-hub n-pulse pulse-b-4" cx="0" cy="0" r="2.0" style="--op:0.084"/></g>
-  <circle class="n-spoke" cx="261.8" cy="169.6" r="0.7" style="--op:0.043"/>
-  <circle class="n-spoke" cx="235.9" cy="190.6" r="0.63" style="--op:0.043"/>
-  <circle class="n-spoke" cx="230.7" cy="168.9" r="0.66" style="--op:0.033"/>
-  <circle class="n-hub" cx="327.0" cy="196.9" r="2.16" style="--op:0.085"/>
-  <circle class="n-spoke" cx="311.6" cy="195.5" r="0.91" style="--op:0.039"/>
-  <circle class="n-spoke" cx="329.4" cy="207.2" r="0.71" style="--op:0.043"/>
-  <circle class="n-spoke" cx="313.9" cy="207.0" r="0.81" style="--op:0.046"/>
-  <circle class="n-spoke" cx="334.8" cy="203.8" r="0.9" style="--op:0.028"/>
-  <circle class="n-hub" cx="385.9" cy="175.6" r="1.93" style="--op:0.08"/>
-  <circle class="n-spoke" cx="385.3" cy="189.8" r="0.62" style="--op:0.03"/>
-  <circle class="n-spoke" cx="396.8" cy="179.2" r="0.51" style="--op:0.04"/>
-  <circle class="n-spoke" cx="378.6" cy="182.8" r="0.97" style="--op:0.049"/>
-  <circle class="n-hub" cx="51.7" cy="239.3" r="1.78" style="--op:0.081"/>
-  <circle class="n-spoke" cx="49.5" cy="252.6" r="0.71" style="--op:0.041"/>
-  <circle class="n-spoke" cx="37.7" cy="235.7" r="0.7" style="--op:0.048"/>
-  <circle class="n-spoke" cx="31.8" cy="236.7" r="0.99" style="--op:0.026"/>
-  <circle class="n-hub" cx="117.8" cy="240.7" r="2.13" style="--op:0.064"/>
-  <circle class="n-spoke" cx="105.2" cy="225.8" r="0.52" style="--op:0.032"/>
-  <circle class="n-spoke" cx="132.7" cy="248.4" r="0.87" style="--op:0.05"/>
-  <circle class="n-hub" cx="171.2" cy="251.0" r="1.77" style="--op:0.07"/>
-  <circle class="n-spoke" cx="155.2" cy="264.9" r="0.51" style="--op:0.039"/>
-  <circle class="n-spoke" cx="155.0" cy="265.2" r="0.74" style="--op:0.034"/>
-  <circle class="n-hub" cx="251.6" cy="243.4" r="1.89" style="--op:0.084"/>
-  <circle class="n-spoke" cx="235.5" cy="239.0" r="0.92" style="--op:0.032"/>
-  <circle class="n-spoke" cx="237.7" cy="250.0" r="0.7" style="--op:0.04"/>
-  <circle class="n-spoke" cx="248.6" cy="257.2" r="0.88" style="--op:0.05"/>
-  <circle class="n-spoke" cx="245.6" cy="258.1" r="0.69" style="--op:0.042"/>
-  <circle class="n-hub" cx="326.5" cy="247.4" r="2.03" style="--op:0.084"/>
-  <circle class="n-spoke" cx="317.4" cy="233.9" r="0.57" style="--op:0.029"/>
-  <circle class="n-spoke" cx="322.7" cy="265.3" r="0.55" style="--op:0.048"/>
-  <circle class="n-spoke" cx="323.9" cy="256.2" r="0.63" style="--op:0.037"/>
-  <circle class="n-spoke" cx="326.8" cy="257.0" r="0.56" style="--op:0.033"/>
-  <circle class="n-hub" cx="385.2" cy="236.6" r="1.71" style="--op:0.077"/>
-  <circle class="n-spoke" cx="370.2" cy="246.3" r="0.57" style="--op:0.041"/>
-  <circle class="n-spoke" cx="397.6" cy="240.8" r="0.64" style="--op:0.031"/>
-  <circle class="n-spoke" cx="371.9" cy="246.5" r="0.74" style="--op:0.034"/>
-  <circle class="n-hub" cx="-9.0" cy="298.8" r="1.86" style="--op:0.062"/>
-  <circle class="n-spoke" cx="3.1" cy="290.7" r="0.53" style="--op:0.047"/>
-  <circle class="n-spoke" cx="8.0" cy="291.8" r="0.65" style="--op:0.027"/>
-  <circle class="n-hub" cx="137.8" cy="313.7" r="1.81" style="--op:0.075"/>
-  <circle class="n-spoke" cx="151.0" cy="330.6" r="1.0" style="--op:0.03"/>
-  <circle class="n-spoke" cx="138.3" cy="331.9" r="0.93" style="--op:0.037"/>
-  <circle class="n-spoke" cx="151.5" cy="318.2" r="0.71" style="--op:0.045"/>
-  <circle class="n-spoke" cx="152.7" cy="327.4" r="0.7" style="--op:0.026"/>
-  <circle class="n-hub" cx="238.6" cy="317.4" r="2.03" style="--op:0.08"/>
-  <circle class="n-spoke" cx="228.1" cy="315.5" r="0.81" style="--op:0.032"/>
-  <circle class="n-spoke" cx="222.0" cy="323.6" r="0.97" style="--op:0.047"/>
-  <circle class="n-spoke" cx="226.7" cy="320.8" r="1.0" style="--op:0.036"/>
-  <circle class="n-hub" cx="321.7" cy="313.5" r="2.2" style="--op:0.082"/>
-  <circle class="n-spoke" cx="316.0" cy="301.0" r="0.59" style="--op:0.026"/>
-  <circle class="n-spoke" cx="320.9" cy="293.9" r="0.58" style="--op:0.028"/>
-  <circle class="n-spoke" cx="330.0" cy="323.2" r="0.54" style="--op:0.034"/>
-  <circle class="n-spoke" cx="332.2" cy="324.5" r="0.88" style="--op:0.033"/>
-  <circle class="n-hub" cx="360.3" cy="317.9" r="2.01" style="--op:0.06"/>
-  <circle class="n-spoke" cx="375.3" cy="305.9" r="0.61" style="--op:0.049"/>
-  <circle class="n-spoke" cx="350.6" cy="308.3" r="0.51" style="--op:0.038"/>
-  <circle class="n-spoke" cx="357.9" cy="335.7" r="0.91" style="--op:0.045"/>
-  <circle class="n-spoke" cx="345.0" cy="311.3" r="0.87" style="--op:0.035"/>
-  <circle class="n-hub" cx="12.7" cy="376.1" r="2.18" style="--op:0.085"/>
-  <circle class="n-spoke" cx="10.5" cy="388.0" r="0.88" style="--op:0.05"/>
-  <circle class="n-spoke" cx="27.5" cy="371.5" r="0.55" style="--op:0.049"/>
-  <circle class="n-spoke" cx="6.1" cy="366.6" r="0.7" style="--op:0.043"/>
-  <circle class="n-spoke" cx="5.7" cy="360.4" r="0.63" style="--op:0.048"/>
-  <circle class="n-spoke" cx="25.0" cy="376.9" r="0.51" style="--op:0.039"/>
-  <circle class="n-hub" cx="77.0" cy="361.3" r="1.84" style="--op:0.072"/>
-  <circle class="n-spoke" cx="69.6" cy="354.1" r="0.68" style="--op:0.041"/>
-  <circle class="n-spoke" cx="67.4" cy="358.8" r="0.91" style="--op:0.034"/>
-  <g transform="translate(115.7,370.0)"><circle class="n-hub n-pulse pulse-a-4" cx="0" cy="0" r="2.08" style="--op:0.071"/></g>
-  <circle class="n-spoke" cx="125.2" cy="364.3" r="0.64" style="--op:0.048"/>
-  <circle class="n-spoke" cx="117.8" cy="391.7" r="0.66" style="--op:0.027"/>
-  <g transform="translate(174.3,367.3)"><circle class="n-hub n-pulse pulse-a-0" cx="0" cy="0" r="1.9" style="--op:0.082"/></g>
-  <g transform="translate(162.7,368.9)"><circle class="n-spoke n-react react-a" cx="0" cy="0" r="0.61" style="--op:0.044"/></g>
-  <g transform="translate(164.0,382.8)"><circle class="n-spoke n-pulse pulse-a-3" cx="0" cy="0" r="0.77" style="--op:0.042"/></g>
-  <g transform="translate(179.6,358.8)"><circle class="n-spoke n-pulse pulse-a-2" cx="0" cy="0" r="0.59" style="--op:0.028"/></g>
-  <g transform="translate(188.6,380.6)"><circle class="n-spoke n-pulse pulse-a-1" cx="0" cy="0" r="0.57" style="--op:0.034"/></g>
-  <circle class="n-hub" cx="234.7" cy="367.0" r="1.96" style="--op:0.06"/>
-  <circle class="n-spoke" cx="244.7" cy="350.9" r="0.75" style="--op:0.035"/>
-  <circle class="n-spoke" cx="217.2" cy="373.4" r="0.66" style="--op:0.038"/>
-  <circle class="n-spoke" cx="226.3" cy="374.0" r="0.98" style="--op:0.03"/>
-  <circle class="n-spoke" cx="246.1" cy="383.4" r="0.94" style="--op:0.033"/>
-  <circle class="n-hub" cx="327.3" cy="377.6" r="2.15" style="--op:0.063"/>
-  <circle class="n-spoke" cx="319.9" cy="392.0" r="0.99" style="--op:0.036"/>
-  <circle class="n-spoke" cx="326.8" cy="356.7" r="0.98" style="--op:0.03"/>
-  <circle class="n-spoke" cx="314.9" cy="383.7" r="0.7" style="--op:0.043"/>
-  <circle class="n-spoke" cx="344.0" cy="389.3" r="0.59" style="--op:0.032"/>
-  <circle class="n-hub" cx="375.0" cy="359.1" r="2.11" style="--op:0.088"/>
-  <circle class="n-spoke" cx="361.0" cy="355.1" r="0.66" style="--op:0.03"/>
-  <circle class="n-spoke" cx="357.2" cy="350.9" r="0.68" style="--op:0.05"/>
-  <circle class="n-hub" cx="7.2" cy="450.7" r="1.79" style="--op:0.079"/>
-  <circle class="n-spoke" cx="17.7" cy="456.1" r="0.69" style="--op:0.041"/>
-  <circle class="n-hub" cx="66.9" cy="433.4" r="1.83" style="--op:0.078"/>
-  <circle class="n-spoke" cx="57.3" cy="451.4" r="0.94" style="--op:0.046"/>
-  <circle class="n-spoke" cx="70.3" cy="450.6" r="0.81" style="--op:0.038"/>
-  <circle class="n-spoke" cx="57.2" cy="451.8" r="0.78" style="--op:0.028"/>
-  <circle class="n-spoke" cx="60.4" cy="446.6" r="0.92" style="--op:0.042"/>
-  <circle class="n-spoke" cx="49.7" cy="421.7" r="0.73" style="--op:0.042"/>
-  <circle class="n-hub" cx="117.5" cy="452.0" r="1.95" style="--op:0.072"/>
-  <circle class="n-spoke" cx="130.1" cy="444.4" r="0.62" style="--op:0.04"/>
-  <circle class="n-spoke" cx="121.7" cy="439.7" r="0.79" style="--op:0.038"/>
-  <circle class="n-spoke" cx="111.6" cy="464.9" r="0.52" style="--op:0.041"/>
-  <circle class="n-spoke" cx="136.4" cy="443.7" r="0.72" style="--op:0.04"/>
-  <circle class="n-spoke" cx="117.6" cy="465.7" r="0.8" style="--op:0.048"/>
-  <circle class="n-hub" cx="256.5" cy="441.3" r="1.79" style="--op:0.074"/>
-  <circle class="n-spoke" cx="274.1" cy="444.0" r="1.0" style="--op:0.043"/>
-  <circle class="n-spoke" cx="239.9" cy="431.5" r="0.66" style="--op:0.043"/>
-  <circle class="n-spoke" cx="255.6" cy="427.6" r="0.99" style="--op:0.035"/>
-  <circle class="n-hub" cx="324.9" cy="428.7" r="2.22" style="--op:0.064"/>
-  <circle class="n-spoke" cx="305.7" cy="423.7" r="1.0" style="--op:0.037"/>
-  <circle class="n-spoke" cx="314.5" cy="424.3" r="0.62" style="--op:0.046"/>
-  <circle class="n-spoke" cx="326.1" cy="408.2" r="0.82" style="--op:0.048"/>
-  <circle class="n-spoke" cx="323.1" cy="437.8" r="0.91" style="--op:0.045"/>
-  <circle class="n-hub" cx="386.4" cy="447.4" r="2.01" style="--op:0.09"/>
-  <circle class="n-spoke" cx="396.8" cy="451.3" r="0.53" style="--op:0.047"/>
-  <circle class="n-spoke" cx="383.8" cy="456.3" r="0.86" style="--op:0.031"/>
-  <circle class="n-spoke" cx="394.3" cy="435.2" r="0.9" style="--op:0.036"/>
-  <circle class="n-spoke" cx="375.1" cy="441.0" r="0.77" style="--op:0.047"/>
-  <circle class="n-hub" cx="2.6" cy="500.5" r="1.82" style="--op:0.068"/>
-  <circle class="n-spoke" cx="11.3" cy="505.6" r="0.82" style="--op:0.027"/>
-  <circle class="n-spoke" cx="17.5" cy="509.2" r="0.78" style="--op:0.045"/>
-  <circle class="n-spoke" cx="14.2" cy="515.2" r="0.75" style="--op:0.031"/>
-  <circle class="n-hub" cx="65.0" cy="499.9" r="2.18" style="--op:0.086"/>
-  <circle class="n-spoke" cx="48.9" cy="508.5" r="0.89" style="--op:0.039"/>
-  <circle class="n-spoke" cx="44.2" cy="501.4" r="0.95" style="--op:0.045"/>
-  <circle class="n-spoke" cx="57.1" cy="512.6" r="0.58" style="--op:0.034"/>
-  <circle class="n-spoke" cx="53.5" cy="515.7" r="0.55" style="--op:0.026"/>
-  <circle class="n-spoke" cx="59.6" cy="509.3" r="0.67" style="--op:0.047"/>
-  <circle class="n-hub" cx="129.0" cy="513.8" r="2.2" style="--op:0.064"/>
-  <circle class="n-spoke" cx="111.1" cy="509.5" r="0.59" style="--op:0.035"/>
-  <circle class="n-spoke" cx="123.6" cy="493.6" r="0.92" style="--op:0.04"/>
-  <circle class="n-spoke" cx="112.3" cy="524.3" r="0.95" style="--op:0.027"/>
-  <circle class="n-spoke" cx="119.0" cy="496.4" r="0.99" style="--op:0.03"/>
-  <circle class="n-hub" cx="194.2" cy="492.0" r="2.08" style="--op:0.086"/>
-  <circle class="n-spoke" cx="204.5" cy="474.2" r="0.86" style="--op:0.03"/>
-  <circle class="n-spoke" cx="210.9" cy="487.4" r="0.83" style="--op:0.036"/>
-  <circle class="n-spoke" cx="176.2" cy="489.3" r="0.51" style="--op:0.033"/>
-  <circle class="n-spoke" cx="198.9" cy="478.3" r="0.66" style="--op:0.041"/>
-  <circle class="n-hub" cx="250.9" cy="493.9" r="1.87" style="--op:0.078"/>
-  <circle class="n-spoke" cx="261.4" cy="487.7" r="0.85" style="--op:0.03"/>
-  <circle class="n-spoke" cx="260.0" cy="508.6" r="0.56" style="--op:0.042"/>
-  <circle class="n-spoke" cx="245.6" cy="481.8" r="0.73" style="--op:0.028"/>
-  <circle class="n-spoke" cx="238.7" cy="504.0" r="0.56" style="--op:0.049"/>
-  <circle class="n-hub" cx="295.0" cy="505.0" r="2.07" style="--op:0.071"/>
-  <circle class="n-spoke" cx="304.6" cy="503.2" r="0.6" style="--op:0.05"/>
-  <circle class="n-spoke" cx="291.2" cy="514.8" r="0.85" style="--op:0.043"/>
-  <circle class="n-spoke" cx="283.6" cy="489.7" r="0.68" style="--op:0.033"/>
-  <circle class="n-hub" cx="375.6" cy="495.3" r="1.94" style="--op:0.064"/>
-  <circle class="n-spoke" cx="391.6" cy="485.5" r="0.82" style="--op:0.036"/>
-  <circle class="n-spoke" cx="390.8" cy="497.0" r="0.91" style="--op:0.035"/>
-  <circle class="n-spoke" cx="379.7" cy="482.9" r="0.73" style="--op:0.038"/>
-  <circle class="n-hub" cx="4.1" cy="573.1" r="2.26" style="--op:0.07"/>
-  <circle class="n-spoke" cx="8.9" cy="584.0" r="0.85" style="--op:0.031"/>
-  <circle class="n-spoke" cx="5.8" cy="591.4" r="0.79" style="--op:0.032"/>
-  <circle class="n-hub" cx="44.4" cy="550.8" r="2.22" style="--op:0.069"/>
-  <circle class="n-spoke" cx="55.6" cy="542.1" r="0.93" style="--op:0.042"/>
-  <circle class="n-spoke" cx="62.3" cy="539.6" r="0.73" style="--op:0.048"/>
-  <circle class="n-spoke" cx="29.6" cy="535.6" r="0.69" style="--op:0.044"/>
-  <circle class="n-hub" cx="191.8" cy="555.9" r="2.06" style="--op:0.073"/>
-  <circle class="n-spoke" cx="179.5" cy="557.5" r="0.53" style="--op:0.035"/>
-  <circle class="n-spoke" cx="207.6" cy="542.3" r="0.64" style="--op:0.036"/>
-  <circle class="n-spoke" cx="182.9" cy="569.4" r="0.98" style="--op:0.032"/>
-  <circle class="n-spoke" cx="206.5" cy="551.8" r="0.85" style="--op:0.042"/>
-  <circle class="n-hub" cx="241.8" cy="564.0" r="1.85" style="--op:0.072"/>
-  <circle class="n-spoke" cx="232.2" cy="571.0" r="0.57" style="--op:0.047"/>
-  <circle class="n-spoke" cx="254.6" cy="578.5" r="0.63" style="--op:0.036"/>
-  <circle class="n-spoke" cx="260.9" cy="561.1" r="0.67" style="--op:0.046"/>
-  <circle class="n-hub" cx="385.7" cy="553.8" r="2.21" style="--op:0.078"/>
-  <circle class="n-spoke" cx="388.0" cy="544.4" r="0.77" style="--op:0.027"/>
-  <circle class="n-hub" cx="-0.1" cy="632.1" r="2.24" style="--op:0.063"/>
-  <circle class="n-spoke" cx="5.2" cy="614.6" r="0.68" style="--op:0.034"/>
-  <circle class="n-spoke" cx="7.2" cy="643.1" r="0.86" style="--op:0.042"/>
-  <circle class="n-hub" cx="69.6" cy="636.2" r="1.91" style="--op:0.087"/>
-  <circle class="n-spoke" cx="82.3" cy="649.9" r="0.97" style="--op:0.026"/>
-  <circle class="n-spoke" cx="58.1" cy="625.5" r="0.82" style="--op:0.037"/>
-  <circle class="n-spoke" cx="85.1" cy="641.6" r="0.68" style="--op:0.037"/>
-  <circle class="n-spoke" cx="74.7" cy="646.7" r="0.66" style="--op:0.042"/>
-  <circle class="n-hub" cx="112.1" cy="618.2" r="2.06" style="--op:0.089"/>
-  <circle class="n-spoke" cx="116.5" cy="609.2" r="0.99" style="--op:0.05"/>
-  <circle class="n-spoke" cx="109.8" cy="636.4" r="0.7" style="--op:0.046"/>
-  <circle class="n-spoke" cx="124.6" cy="627.0" r="0.82" style="--op:0.043"/>
-  <circle class="n-hub" cx="175.7" cy="616.9" r="2.3" style="--op:0.062"/>
-  <circle class="n-spoke" cx="192.0" cy="626.2" r="0.73" style="--op:0.035"/>
-  <circle class="n-spoke" cx="160.7" cy="612.7" r="0.83" style="--op:0.03"/>
-  <circle class="n-spoke" cx="187.1" cy="618.3" r="0.99" style="--op:0.03"/>
-  <circle class="n-spoke" cx="182.0" cy="633.6" r="0.68" style="--op:0.029"/>
-  <circle class="n-hub" cx="247.8" cy="613.4" r="1.94" style="--op:0.082"/>
-  <circle class="n-spoke" cx="251.9" cy="628.9" r="0.54" style="--op:0.029"/>
-  <circle class="n-spoke" cx="236.9" cy="611.6" r="0.82" style="--op:0.041"/>
-  <circle class="n-spoke" cx="254.2" cy="602.0" r="0.87" style="--op:0.031"/>
-  <circle class="n-spoke" cx="244.1" cy="622.6" r="0.91" style="--op:0.043"/>
-  <circle class="n-hub" cx="327.4" cy="618.3" r="2.17" style="--op:0.064"/>
-  <circle class="n-spoke" cx="345.0" cy="618.0" r="0.73" style="--op:0.025"/>
-  <circle class="n-spoke" cx="336.4" cy="622.4" r="0.93" style="--op:0.049"/>
-  <circle class="n-spoke" cx="338.6" cy="632.0" r="0.95" style="--op:0.026"/>
-  <circle class="n-hub" cx="355.1" cy="633.4" r="1.91" style="--op:0.076"/>
-  <circle class="n-spoke" cx="334.2" cy="638.6" r="0.77" style="--op:0.028"/>
-  <circle class="n-spoke" cx="363.5" cy="618.1" r="0.89" style="--op:0.033"/>
-  <circle class="n-spoke" cx="369.0" cy="634.5" r="0.75" style="--op:0.028"/>
-  <circle class="n-spoke" cx="352.1" cy="621.7" r="0.78" style="--op:0.028"/>
-  <circle class="n-spoke" cx="341.4" cy="627.6" r="0.54" style="--op:0.038"/>
-  <circle class="n-hub" cx="-6.9" cy="692.5" r="1.88" style="--op:0.083"/>
-  <circle class="n-spoke" cx="5.5" cy="676.8" r="0.62" style="--op:0.035"/>
-  <circle class="n-hub" cx="48.9" cy="680.4" r="1.73" style="--op:0.067"/>
-  <circle class="n-spoke" cx="45.4" cy="693.8" r="0.73" style="--op:0.039"/>
-  <circle class="n-spoke" cx="36.4" cy="677.2" r="0.73" style="--op:0.046"/>
-  <circle class="n-spoke" cx="41.5" cy="692.4" r="0.55" style="--op:0.046"/>
-  <circle class="n-hub" cx="135.9" cy="672.5" r="1.79" style="--op:0.089"/>
-  <circle class="n-spoke" cx="145.7" cy="678.5" r="0.76" style="--op:0.035"/>
-  <circle class="n-spoke" cx="128.4" cy="679.8" r="0.81" style="--op:0.047"/>
-  <circle class="n-spoke" cx="131.3" cy="684.2" r="0.98" style="--op:0.035"/>
-  <circle class="n-spoke" cx="118.9" cy="675.8" r="0.51" style="--op:0.029"/>
-  <circle class="n-spoke" cx="122.7" cy="677.1" r="0.91" style="--op:0.043"/>
-  <circle class="n-hub" cx="169.7" cy="686.7" r="2.13" style="--op:0.065"/>
-  <circle class="n-spoke" cx="176.2" cy="694.6" r="0.77" style="--op:0.026"/>
-  <circle class="n-spoke" cx="161.7" cy="670.3" r="0.56" style="--op:0.033"/>
-  <circle class="n-hub" cx="252.7" cy="687.6" r="2.28" style="--op:0.079"/>
-  <circle class="n-spoke" cx="256.0" cy="696.5" r="0.92" style="--op:0.026"/>
-  <circle class="n-spoke" cx="235.0" cy="691.7" r="0.71" style="--op:0.027"/>
-  <circle class="n-spoke" cx="260.3" cy="693.1" r="0.63" style="--op:0.028"/>
-  <circle class="n-hub" cx="326.5" cy="688.6" r="2.25" style="--op:0.07"/>
-  <circle class="n-spoke" cx="309.1" cy="696.3" r="0.74" style="--op:0.041"/>
-  <circle class="n-spoke" cx="315.8" cy="705.2" r="0.94" style="--op:0.049"/>
-  <circle class="n-hub" cx="371.1" cy="670.4" r="2.04" style="--op:0.075"/>
-  <circle class="n-spoke" cx="378.6" cy="679.4" r="0.95" style="--op:0.035"/>
-  <circle class="n-spoke" cx="381.9" cy="684.8" r="0.65" style="--op:0.043"/>
-  <circle class="n-spoke" cx="350.3" cy="672.7" r="0.63" style="--op:0.034"/>
-  <circle class="n-spoke" cx="357.9" cy="657.5" r="0.71" style="--op:0.037"/>
-  <circle class="n-hub" cx="56.4" cy="751.1" r="1.92" style="--op:0.073"/>
-  <circle class="n-spoke" cx="49.7" cy="730.4" r="0.73" style="--op:0.026"/>
-  <circle class="n-spoke" cx="60.8" cy="734.1" r="0.92" style="--op:0.027"/>
-  <circle class="n-spoke" cx="49.3" cy="745.3" r="0.76" style="--op:0.039"/>
-  <circle class="n-spoke" cx="49.9" cy="762.8" r="0.7" style="--op:0.031"/>
-  <circle class="n-hub" cx="128.1" cy="753.2" r="1.76" style="--op:0.071"/>
-  <circle class="n-spoke" cx="113.0" cy="759.1" r="0.66" style="--op:0.037"/>
-  <circle class="n-spoke" cx="131.8" cy="766.0" r="0.62" style="--op:0.044"/>
-  <circle class="n-spoke" cx="125.3" cy="763.2" r="0.74" style="--op:0.025"/>
-  <circle class="n-spoke" cx="125.3" cy="741.2" r="0.7" style="--op:0.049"/>
-  <circle class="n-spoke" cx="115.6" cy="750.1" r="0.5" style="--op:0.04"/>
-  <circle class="n-hub" cx="196.5" cy="758.6" r="2.28" style="--op:0.071"/>
-  <circle class="n-spoke" cx="187.2" cy="771.0" r="0.8" style="--op:0.034"/>
-  <circle class="n-spoke" cx="208.0" cy="772.8" r="0.65" style="--op:0.04"/>
-  <circle class="n-spoke" cx="212.2" cy="757.3" r="0.79" style="--op:0.033"/>
-  <circle class="n-hub" cx="263.6" cy="752.0" r="2.0" style="--op:0.075"/>
-  <circle class="n-spoke" cx="257.9" cy="731.6" r="0.88" style="--op:0.026"/>
-  <circle class="n-spoke" cx="255.1" cy="748.2" r="0.55" style="--op:0.031"/>
-  <circle class="n-spoke" cx="253.3" cy="735.9" r="0.64" style="--op:0.045"/>
-  <circle class="n-spoke" cx="273.5" cy="763.5" r="0.71" style="--op:0.047"/>
-  <circle class="n-spoke" cx="252.0" cy="758.6" r="0.7" style="--op:0.032"/>
-  <circle class="n-hub" cx="367.6" cy="746.5" r="2.11" style="--op:0.063"/>
-  <circle class="n-spoke" cx="379.9" cy="740.6" r="0.99" style="--op:0.046"/>
-  <circle class="n-spoke" cx="357.2" cy="748.9" r="0.66" style="--op:0.033"/>
-  <circle class="n-hub" cx="-1.3" cy="811.4" r="2.19" style="--op:0.084"/>
-  <circle class="n-spoke" cx="12.4" cy="827.1" r="0.82" style="--op:0.026"/>
-  <circle class="n-spoke" cx="17.1" cy="799.6" r="0.88" style="--op:0.026"/>
-  <circle class="n-spoke" cx="5.6" cy="796.1" r="0.81" style="--op:0.039"/>
-  <circle class="n-hub" cx="70.0" cy="817.5" r="2.26" style="--op:0.079"/>
-  <circle class="n-spoke" cx="78.3" cy="813.8" r="0.51" style="--op:0.048"/>
-  <circle class="n-spoke" cx="64.5" cy="804.9" r="0.88" style="--op:0.039"/>
-  <circle class="n-hub" cx="131.8" cy="795.7" r="1.7" style="--op:0.082"/>
-  <circle class="n-spoke" cx="124.6" cy="804.1" r="0.71" style="--op:0.042"/>
-  <circle class="n-spoke" cx="115.8" cy="784.4" r="0.99" style="--op:0.048"/>
-  <circle class="n-spoke" cx="118.2" cy="799.7" r="0.54" style="--op:0.045"/>
-  <circle class="n-spoke" cx="136.1" cy="775.0" r="0.72" style="--op:0.044"/>
-  <circle class="n-hub" cx="203.3" cy="823.2" r="1.93" style="--op:0.073"/>
-  <circle class="n-spoke" cx="215.5" cy="837.6" r="0.72" style="--op:0.028"/>
-  <circle class="n-spoke" cx="215.2" cy="806.2" r="0.66" style="--op:0.043"/>
-  <circle class="n-spoke" cx="190.3" cy="811.7" r="0.54" style="--op:0.028"/>
-  <circle class="n-spoke" cx="204.2" cy="812.2" r="0.92" style="--op:0.042"/>
-  <circle class="n-spoke" cx="195.3" cy="828.1" r="0.77" style="--op:0.028"/>
-  <circle class="n-hub" cx="322.8" cy="800.5" r="1.77" style="--op:0.069"/>
-  <circle class="n-spoke" cx="310.4" cy="811.3" r="0.98" style="--op:0.039"/>
-  <circle class="n-spoke" cx="330.1" cy="814.5" r="0.96" style="--op:0.03"/>
-  <circle class="n-spoke" cx="321.4" cy="816.9" r="0.71" style="--op:0.038"/>
-  <circle class="n-spoke" cx="314.3" cy="815.6" r="0.92" style="--op:0.028"/>
-  <circle class="n-hub" cx="369.9" cy="807.8" r="2.22" style="--op:0.074"/>
-  <circle class="n-spoke" cx="366.5" cy="788.9" r="0.52" style="--op:0.036"/>
-  <circle class="n-spoke" cx="357.2" cy="816.7" r="0.69" style="--op:0.042"/>
-  <circle class="n-hub" cx="11.1" cy="852.3" r="2.26" style="--op:0.075"/>
+  <path class="n-line" d="M11.1,852.3" r="2.26" style="--op:0.075"/>
   <circle class="n-hub" cx="50.2" cy="862.1" r="2.11" style="--op:0.072"/>
   <circle class="n-spoke" cx="50.4" cy="846.7" r="0.89" style="--op:0.028"/>
   <circle class="n-spoke" cx="70.1" cy="861.4" r="0.87" style="--op:0.029"/>
@@ -1441,6 +1072,9 @@
         </label>
         <button type="button" class="forgot" id="forgotBtn">Forgot password?</button>
       </div>
+
+      <!-- INLINE ERROR BANNER -->
+      <div id="errorMessage" class="error-banner"></div>
 
       <button type="submit" class="btn-continue" id="continueBtn">
         <span class="spinner"></span>
